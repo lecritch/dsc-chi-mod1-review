@@ -29,7 +29,7 @@ Think of an "observation" as an "event" or a "subject".  For example, an observa
 
 - event, where each row isn't tied to a specific identity but instead tied to a specific action that occured. Often, these types of datasets will have a number of features that act as keys that distinguish events from each other, as well as features containing data about the event. For example, a store with multiple locations might have a dataset of "transactions", where the key features for each row are `Store`, `Time` and `Transaction ID`, with other features `Item Purchased`, `Payment Method`, `Coupons Used`, etc.  Notice that the same type of data - purchasing items - can be organized as either features of a "person" or an "event".
 
-Figuring out which "observation" makes a row is an important part of figuring out how to analyze a dataset.  For example, if we wanted to analyze a baseball quantitatively, we could treat each game 
+Figuring out which "observation" makes a row is an important part of figuring out how to analyze a dataset.  
 
 Take a look at the first five rows.  How does this dataset appear to be organized?  What is an "observation"?  What are the features?
 
