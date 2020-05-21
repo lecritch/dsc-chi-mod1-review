@@ -1,3 +1,4 @@
+
 # PANDAS 4EVER
 
 Import 
@@ -1374,3 +1375,751 @@ Find the values of `EstablishmentName` of the 20 inspections whose `Score` most 
 ```python
 
 ```
+
+# Import Libraries
+
+
+```python
+# SQL Connection and Querying
+import sqlite3
+
+# Data manipulation
+import pandas as pd
+
+# API Connection
+import requests
+
+# Visualization
+import matplotlib.pyplot as plt
+```
+
+# SQL
+
+![](index_files/schema.png)
+
+Open a connection to ```chinook.db```
+
+
+```python
+# Your code here
+
+```
+
+
+```python
+# __SOLUTION__
+conn = sqlite3.connect('./data/chinook.db')
+```
+
+## 1.
+
+>Select all column and rows from the genres table
+
+
+```python
+# Your code here
+
+```
+
+
+```python
+# __SOLUTION__
+QUERY = '''SELECT * FROM genres'''
+pd.read_sql(QUERY, conn)
+```
+
+
+
+
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>GenreId</th>
+      <th>Name</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>1</td>
+      <td>Rock</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>2</td>
+      <td>Jazz</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>3</td>
+      <td>Metal</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>4</td>
+      <td>Alternative &amp; Punk</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>5</td>
+      <td>Rock And Roll</td>
+    </tr>
+    <tr>
+      <th>5</th>
+      <td>6</td>
+      <td>Blues</td>
+    </tr>
+    <tr>
+      <th>6</th>
+      <td>7</td>
+      <td>Latin</td>
+    </tr>
+    <tr>
+      <th>7</th>
+      <td>8</td>
+      <td>Reggae</td>
+    </tr>
+    <tr>
+      <th>8</th>
+      <td>9</td>
+      <td>Pop</td>
+    </tr>
+    <tr>
+      <th>9</th>
+      <td>10</td>
+      <td>Soundtrack</td>
+    </tr>
+    <tr>
+      <th>10</th>
+      <td>11</td>
+      <td>Bossa Nova</td>
+    </tr>
+    <tr>
+      <th>11</th>
+      <td>12</td>
+      <td>Easy Listening</td>
+    </tr>
+    <tr>
+      <th>12</th>
+      <td>13</td>
+      <td>Heavy Metal</td>
+    </tr>
+    <tr>
+      <th>13</th>
+      <td>14</td>
+      <td>R&amp;B/Soul</td>
+    </tr>
+    <tr>
+      <th>14</th>
+      <td>15</td>
+      <td>Electronica/Dance</td>
+    </tr>
+    <tr>
+      <th>15</th>
+      <td>16</td>
+      <td>World</td>
+    </tr>
+    <tr>
+      <th>16</th>
+      <td>17</td>
+      <td>Hip Hop/Rap</td>
+    </tr>
+    <tr>
+      <th>17</th>
+      <td>18</td>
+      <td>Science Fiction</td>
+    </tr>
+    <tr>
+      <th>18</th>
+      <td>19</td>
+      <td>TV Shows</td>
+    </tr>
+    <tr>
+      <th>19</th>
+      <td>20</td>
+      <td>Sci Fi &amp; Fantasy</td>
+    </tr>
+    <tr>
+      <th>20</th>
+      <td>21</td>
+      <td>Drama</td>
+    </tr>
+    <tr>
+      <th>21</th>
+      <td>22</td>
+      <td>Comedy</td>
+    </tr>
+    <tr>
+      <th>22</th>
+      <td>23</td>
+      <td>Alternative</td>
+    </tr>
+    <tr>
+      <th>23</th>
+      <td>24</td>
+      <td>Classical</td>
+    </tr>
+    <tr>
+      <th>24</th>
+      <td>25</td>
+      <td>Opera</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+
+
+
+## 2.
+
+1. Select the ```City``` column from the ```customers``` table 
+2. Select the ```Name``` column from the ```genres``` table –– aliased as "Genre" .
+3. Create a column that counts the number of purchases made from each city for Blues music.
+4. Sort the results in descending order.
+5. Return the top ten cities.
+
+
+```python
+# Your code here
+
+```
+
+
+```python
+# __SOLUTION__
+QUERY = '''SELECT customers.City,
+                  COUNT(customers.City) as Count,
+                  genres.Name as Genre
+           FROM customers
+           JOIN invoices
+           USING(CustomerId)
+           JOIN invoice_items
+           USING(InvoiceId)
+           JOIN tracks
+           USING(TrackId)
+           JOIN genres
+           USING(GenreId)
+           WHERE Genre = "Blues"
+           GROUP BY customers.City
+           ORDER BY Count Desc
+           LIMIT 10'''
+pd.read_sql(QUERY, conn)
+```
+
+
+
+
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>City</th>
+      <th>Count</th>
+      <th>Genre</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>Stuttgart</td>
+      <td>9</td>
+      <td>Blues</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>Brasília</td>
+      <td>6</td>
+      <td>Blues</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>New York</td>
+      <td>6</td>
+      <td>Blues</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>Berlin</td>
+      <td>5</td>
+      <td>Blues</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>Amsterdam</td>
+      <td>4</td>
+      <td>Blues</td>
+    </tr>
+    <tr>
+      <th>5</th>
+      <td>Rome</td>
+      <td>4</td>
+      <td>Blues</td>
+    </tr>
+    <tr>
+      <th>6</th>
+      <td>Cupertino</td>
+      <td>3</td>
+      <td>Blues</td>
+    </tr>
+    <tr>
+      <th>7</th>
+      <td>Delhi</td>
+      <td>3</td>
+      <td>Blues</td>
+    </tr>
+    <tr>
+      <th>8</th>
+      <td>Mountain View</td>
+      <td>3</td>
+      <td>Blues</td>
+    </tr>
+    <tr>
+      <th>9</th>
+      <td>Budapest</td>
+      <td>2</td>
+      <td>Blues</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+
+
+
+## 3.
+
+1. Select the ```FirstName``` column from the ```customers``` table
+2. Select the ```LastName``` column from the ```customers``` table
+3. Select the ```Email``` column from the ```customers``` table
+4. Create a new column that is the multiplication of the ```UnitPrice``` and ```Quantity``` columns from the ```invoice_items``` table. 
+    - Alias this column as ```Total```.
+5. Use ```GROUP BY```  to return the sum total for each customer
+6. Sort in descending order
+7. Return the top 20 highest spending customers.
+
+
+```python
+# Your code here
+
+```
+
+
+```python
+# __SOLUTION__
+QUERY = '''SELECT customers.FirstName,
+                  customers.LastName,
+                  customers.Email,
+                  SUM(invoice_items.UnitPrice * 
+                      invoice_items.Quantity) as Total
+                      
+           FROM customers
+           JOIN invoices
+           USING(CustomerId)
+           JOIN invoice_items
+           USING(InvoiceId)
+           GROUP BY Email
+           ORDER BY Total Desc
+           LIMIT 20'''
+
+pd.read_sql(QUERY, conn)
+```
+
+
+
+
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>FirstName</th>
+      <th>LastName</th>
+      <th>Email</th>
+      <th>Total</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>Helena</td>
+      <td>Holý</td>
+      <td>hholy@gmail.com</td>
+      <td>49.62</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>Richard</td>
+      <td>Cunningham</td>
+      <td>ricunningham@hotmail.com</td>
+      <td>47.62</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>Luis</td>
+      <td>Rojas</td>
+      <td>luisrojas@yahoo.cl</td>
+      <td>46.62</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>Hugh</td>
+      <td>O'Reilly</td>
+      <td>hughoreilly@apple.ie</td>
+      <td>45.62</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>Ladislav</td>
+      <td>Kovács</td>
+      <td>ladislav_kovacs@apple.hu</td>
+      <td>45.62</td>
+    </tr>
+    <tr>
+      <th>5</th>
+      <td>Fynn</td>
+      <td>Zimmermann</td>
+      <td>fzimmermann@yahoo.de</td>
+      <td>43.62</td>
+    </tr>
+    <tr>
+      <th>6</th>
+      <td>Frank</td>
+      <td>Ralston</td>
+      <td>fralston@gmail.com</td>
+      <td>43.62</td>
+    </tr>
+    <tr>
+      <th>7</th>
+      <td>Julia</td>
+      <td>Barnett</td>
+      <td>jubarnett@gmail.com</td>
+      <td>43.62</td>
+    </tr>
+    <tr>
+      <th>8</th>
+      <td>Victor</td>
+      <td>Stevens</td>
+      <td>vstevens@yahoo.com</td>
+      <td>42.62</td>
+    </tr>
+    <tr>
+      <th>9</th>
+      <td>Astrid</td>
+      <td>Gruber</td>
+      <td>astrid.gruber@apple.at</td>
+      <td>42.62</td>
+    </tr>
+    <tr>
+      <th>10</th>
+      <td>Terhi</td>
+      <td>Hämäläinen</td>
+      <td>terhi.hamalainen@apple.fi</td>
+      <td>41.62</td>
+    </tr>
+    <tr>
+      <th>11</th>
+      <td>František</td>
+      <td>Wichterlová</td>
+      <td>frantisekw@jetbrains.com</td>
+      <td>40.62</td>
+    </tr>
+    <tr>
+      <th>12</th>
+      <td>Isabelle</td>
+      <td>Mercier</td>
+      <td>isabelle_mercier@apple.fr</td>
+      <td>40.62</td>
+    </tr>
+    <tr>
+      <th>13</th>
+      <td>Johannes</td>
+      <td>Van der Berg</td>
+      <td>johavanderberg@yahoo.nl</td>
+      <td>40.62</td>
+    </tr>
+    <tr>
+      <th>14</th>
+      <td>Dan</td>
+      <td>Miller</td>
+      <td>dmiller@comcast.com</td>
+      <td>39.62</td>
+    </tr>
+    <tr>
+      <th>15</th>
+      <td>João</td>
+      <td>Fernandes</td>
+      <td>jfernandes@yahoo.pt</td>
+      <td>39.62</td>
+    </tr>
+    <tr>
+      <th>16</th>
+      <td>Bjørn</td>
+      <td>Hansen</td>
+      <td>bjorn.hansen@yahoo.no</td>
+      <td>39.62</td>
+    </tr>
+    <tr>
+      <th>17</th>
+      <td>François</td>
+      <td>Tremblay</td>
+      <td>ftremblay@gmail.com</td>
+      <td>39.62</td>
+    </tr>
+    <tr>
+      <th>18</th>
+      <td>Heather</td>
+      <td>Leacock</td>
+      <td>hleacock@gmail.com</td>
+      <td>39.62</td>
+    </tr>
+    <tr>
+      <th>19</th>
+      <td>Jack</td>
+      <td>Smith</td>
+      <td>jacksmith@microsoft.com</td>
+      <td>39.62</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+
+
+
+# API
+
+
+>For this review, we will take a look at three separate APIs and work through the process of writing requests based on each APIs documentation.
+
+## Public Holiday API
+
+>This API provides public holiday information for more than 90 countries. 
+
+>The API's Documentation can be found [here](https://date.nager.at/swagger/index.html)
+
+
+
+**Write a request to return all available countries**
+
+
+```python
+# Your code here
+
+```
+
+
+```python
+# __SOLUTION__
+REQUEST =  "https://date.nager.at/Api/v2/AvailableCountries"
+req = requests.get(REQUEST).json()
+req[:3]
+```
+
+
+
+
+    [{'key': 'AD', 'value': 'Andorra'},
+     {'key': 'AL', 'value': 'Albania'},
+     {'key': 'AR', 'value': 'Argentina'}]
+
+
+
+**Convert the results of our request to a DataFrame**
+
+
+```python
+# Your code here
+
+```
+
+
+```python
+# __SOLUTION__
+countries = pd.DataFrame(req)
+```
+
+**What is the key for the United States?**
+
+
+```python
+# Your code here
+
+```
+
+
+```python
+# __SOLUTION__
+us_code = countries[countries.value == 'United States'].key.values[0]
+```
+
+**Make a request to the API that returns the public holidays for the United States**
+
+
+```python
+# Your code here
+
+```
+
+
+```python
+# __SOLUTION__
+REQUEST = "https://date.nager.at/Api/v2/PublicHolidays/2019/{}".format(us_code)
+us = requests.get(REQUEST).json()
+us[:2]
+```
+
+
+
+
+    [{'date': '2019-01-01',
+      'localName': "New Year's Day",
+      'name': "New Year's Day",
+      'countryCode': 'US',
+      'fixed': False,
+      'global': True,
+      'counties': None,
+      'launchYear': None,
+      'type': 'Public'},
+     {'date': '2019-01-21',
+      'localName': 'Martin Luther King, Jr. Day',
+      'name': 'Martin Luther King, Jr. Day',
+      'countryCode': 'US',
+      'fixed': False,
+      'global': True,
+      'counties': None,
+      'launchYear': None,
+      'type': 'Public'}]
+
+
+
+**Convert ```us``` to a DataFrame**
+
+
+```python
+# Your code here
+
+```
+
+
+```python
+# __SOLUTION__
+us = pd.DataFrame(us)
+```
+
+## iTunes API
+
+Documentation for this API can be found [here](https://affiliate.itunes.apple.com/resources/documentation/itunes-store-web-service-search-api/)
+
+Submit a request to the iTunes API that returns data on Harry Potter Audio Books
+
+
+```python
+# Your code here
+
+```
+
+
+```python
+# __SOLUTION__
+SEARCH_TERM = 'Harry Potter'
+MEDIA_TYPE = 'audiobook'
+REQUEST = 'https://itunes.apple.com/search?term={}&entity={}'.format(SEARCH_TERM, MEDIA_TYPE)
+req = requests.get(REQUEST).json()
+```
+
+### Level Up
+
+Using the data from the Harry Potter Audio Books request, collect the artistId for each entry and use those IDs to make a single ```https://itunes.apple.com/lookup?id={}&entity=audiobooks&sort=recent``` request. 
+
+To do this:
+- Every id should be added to a string
+- Each id should be followed by a comma. ie ```id1,id2,id3,id4```
+    - The final id should not be followed by a comma
+- No id should be added to the string more than once.
+
+
+```python
+# Your code here
+
+```
+
+
+```python
+# __SOLUTION__
+ids = []
+ARTIST_IDS = ''
+for result in req['results']:
+    id_ = str(result['artistId'])
+    if id_ not in ids: 
+        ARTIST_IDS += id_ + ','
+        ids.append(id_)
+        
+if ARTIST_IDS[-1] == ',':
+    ARTIST_IDS = ARTIST_IDS[:-1]
+```
+
+
+```python
+# Run this cell!
+REQUEST = 'https://itunes.apple.com/lookup?id={}&entity=audiobook&sort=recent'.format(ARTIST_IDS)
+req = requests.get(REQUEST).json()
+
+number_of_results = req['resultCount']
+print('Number of results:', number_of_results)
+```
+
+    Number of results: 123
+
+
+
+```python
+# __SOLUTION__
+REQUEST = 'https://itunes.apple.com/lookup?id={}&entity=audiobook&sort=recent'.format(ARTIST_IDS)
+req = requests.get(REQUEST).json()
+
+number_of_results = req['resultCount']
+print('Number of results:', number_of_results)
+```
+
+    Number of results: 123
+
