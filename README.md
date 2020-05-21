@@ -1,3 +1,4 @@
+
 # PANDAS 4EVER
 
 Import 
@@ -196,3 +197,167 @@ Find the values of `EstablishmentName` of the 20 inspections whose `Score` most 
 ```python
 
 ```
+
+# Import Libraries
+
+
+```python
+# SQL Connection and Querying
+import sqlite3
+
+# Data manipulation
+import pandas as pd
+
+# API Connection
+import requests
+
+# Visualization
+import matplotlib.pyplot as plt
+```
+
+# SQL
+
+![](index_files/schema.png)
+
+Open a connection to ```chinook.db```
+
+
+```python
+# Your code here
+
+```
+
+## 1.
+
+>Select all column and rows from the genres table
+
+
+```python
+# Your code here
+
+```
+
+## 2.
+
+1. Select the ```City``` column from the ```customers``` table 
+2. Select the ```Name``` column from the ```genres``` table –– aliased as "Genre" .
+3. Create a column that counts the number of purchases made from each city for Blues music.
+4. Sort the results in descending order.
+5. Return the top ten cities.
+
+
+```python
+# Your code here
+
+```
+
+## 3.
+
+1. Select the ```FirstName``` column from the ```customers``` table
+2. Select the ```LastName``` column from the ```customers``` table
+3. Select the ```Email``` column from the ```customers``` table
+4. Create a new column that is the multiplication of the ```UnitPrice``` and ```Quantity``` columns from the ```invoice_items``` table. 
+    - Alias this column as ```Total```.
+5. Use ```GROUP BY```  to return the sum total for each customer
+6. Sort in descending order
+7. Return the top 20 highest spending customers.
+
+
+```python
+# Your code here
+
+```
+
+# API
+
+
+>For this review, we will take a look at three separate APIs and work through the process of writing requests based on each APIs documentation.
+
+## Public Holiday API
+
+>This API provides public holiday information for more than 90 countries. 
+
+>The API's Documentation can be found [here](https://date.nager.at/swagger/index.html)
+
+
+
+**Write a request to return all available countries**
+
+
+```python
+# Your code here
+
+```
+
+**Convert the results of our request to a DataFrame**
+
+
+```python
+# Your code here
+
+```
+
+**What is the key for the United States?**
+
+
+```python
+# Your code here
+
+```
+
+**Make a request to the API that returns the public holidays for the United States**
+
+
+```python
+# Your code here
+
+```
+
+**Convert ```us``` to a DataFrame**
+
+
+```python
+# Your code here
+
+```
+
+## iTunes API
+
+Documentation for this API can be found [here](https://affiliate.itunes.apple.com/resources/documentation/itunes-store-web-service-search-api/)
+
+Submit a request to the iTunes API that returns data on Harry Potter Audio Books
+
+
+```python
+# Your code here
+
+```
+
+### Level Up
+
+Using the data from the Harry Potter Audio Books request, collect the artistId for each entry and use those IDs to make a single ```https://itunes.apple.com/lookup?id={}&entity=audiobooks&sort=recent``` request. 
+
+To do this:
+- Every id should be added to a string
+- Each id should be followed by a comma. ie ```id1,id2,id3,id4```
+    - The final id should not be followed by a comma
+- No id should be added to the string more than once.
+
+
+```python
+# Your code here
+
+```
+
+
+```python
+# Run this cell!
+REQUEST = 'https://itunes.apple.com/lookup?id={}&entity=audiobook&sort=recent'.format(ARTIST_IDS)
+req = requests.get(REQUEST).json()
+
+number_of_results = req['resultCount']
+print('Number of results:', number_of_results)
+```
+
+    Number of results: 123
+
